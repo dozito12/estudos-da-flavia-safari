@@ -1,0 +1,9 @@
+﻿Estudos da Flavia no Safari
+
+Abra este link no Safari do iPhone:
+https://dozito12.github.io/estudos-da-flavia-safari/
+
+Depois toque em Compartilhar e escolha "Adicionar a Tela de Inicio".
+
+Observacao:
+Esta versao usa a senha do painel e salva o progresso no Safari do aparelho.
