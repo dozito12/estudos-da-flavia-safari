@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estudos da Flavia</title>
+  <meta name="theme-color" content="#fff1f8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Estudos da Flavia">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/pwa-icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="locked">
+  <section id="welcomeScreen" class="welcome-screen" aria-label="Entrada do painel">
+    <div class="welcome-photos" aria-hidden="true">
+      <img class="welcome-photo photo-one" src="assets/bg_love_1.jpg" alt="">
+      <img class="welcome-photo photo-two" src="assets/bg_love_2.jpg" alt="">
+    </div>
+    <div class="welcome-content">
+      <p class="welcome-kicker">Estudos Da Flavia</p>
+      <h1>Um programa feito para a Flavia</h1>
+      <p>Estudos, simulados, videoaulas, recados, progresso e rotina leve em um só lugar.</p>
+      <label class="welcome-password">
+        Senha
+        <input id="programPassword" type="password" inputmode="numeric" autocomplete="off" placeholder="Digite a senha">
+      </label>
+      <div id="passwordMessage" class="password-message" aria-live="polite"></div>
+      <button id="startProgram" class="welcome-button" type="button">Iniciar programa</button>
+      <small class="welcome-hint">Senha preservada do painel original.</small>
+    </div>
+  </section>
+
+  <section id="passwordPrank" class="prank-modal hidden" aria-modal="true" role="dialog" aria-live="assertive">
+    <div id="prankStepOne" class="prank-card">
+      <h2>NAO ACREDITO!!!!</h2>
+      <p>Errou a senha do painel da Flavia.</p>
+      <button id="prankNext" class="prank-button" type="button">desculpa vida</button>
+    </div>
+    <div id="prankStepTwo" class="prank-card hidden">
+      <h2>SE ERRAR DENOVO SEU PC EXPLODE</h2>
+      <p>Brincadeira. Respira, pede desculpa e tenta de novo.</p>
+      <button id="prankClose" class="prank-button" type="button">OK</button>
+    </div>
+  </section>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <img src="assets/flavia_icon.jpg" alt="" onerror="this.style.display='none'; this.parentElement.classList.add('missing-photo');">
+        </div>
+        <div>
+          <h1>Estudos Da Flavia</h1>
+          <p>ENCCEJA 2026 com amor</p>
+        </div>
+      </div>
+      <div class="side-photos" aria-hidden="true">
+        <img src="assets/bg_love_1.jpg" alt="">
+        <img src="assets/flavia_icon.jpg" alt="">
+        <img src="assets/bg_love_2.jpg" alt="">
+      </div>
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="dashboard">Painel</button>
+        <button class="nav-item" data-view="subjects">Aulas de apoio</button>
+        <button class="nav-item" data-view="quiz">Simulados</button>
+        <button class="nav-item" data-view="errors">Erros</button>
+        <button class="nav-item" data-view="essay">Redação</button>
+        <button class="nav-item" data-view="materials">Materiais</button>
+      </nav>
+      <div class="side-card">
+        <label for="startDate">Início do plano</label>
+        <input id="startDate" type="date">
+        <button id="useToday" class="secondary">Usar hoje</button>
+        <small>O Painel mostra só o dia atual. Ao finalizar, aparece o próximo.</small>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Estudos Da Flavia — rotina rosa e direta</span>
+          <h2 id="pageTitle">Painel</h2>
+        </div>
+        <div class="top-photo-strip" aria-hidden="true">
+          <img src="assets/bg_love_1.jpg" alt="">
+          <img src="assets/flavia_icon.jpg" alt="">
+          <img src="assets/bg_love_2.jpg" alt="">
+        </div>
+        <div class="top-actions">
+          <button id="exportProgress" class="secondary">Exportar progresso</button>
+          <button id="printPage" class="primary">Imprimir/PDF</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="hero simple-hero">
+          <div>
+            <span id="todayCursorBadge" class="pill">Hoje</span>
+            <h3 id="todayTitle">Dia de estudo</h3>
+            <p id="todaySummary">Faça somente o dia carregado aqui. Quando finalizar, o painel mostra o próximo.</p>
+          </div>
+          <div class="hero-photo-stack" aria-hidden="true">
+            <img class="hero-photo main-photo" src="assets/bg_love_1.jpg" alt="">
+            <img class="hero-photo small-photo" src="assets/flavia_icon.jpg" alt="">
+          </div>
+          <div class="exam-box">
+            <strong id="daysToExam">--</strong>
+            <span>dias até 23/08/2026</span>
+          </div>
+        </div>
+
+        <section class="panel today-panel">
+          <div class="panel-head">
+            <h3>Fazer o dia</h3>
+            <span id="todayProgress" class="pill">0/0 feito</span>
+          </div>
+          <div id="todayPlan" class="task-list"></div>
+          <div class="today-actions">
+            <button id="prevPlanDay" class="secondary" type="button">Voltar dia</button>
+            <button id="startTodayQuiz" class="primary" type="button">Fazer questões</button>
+            <button id="finishPlanDay" class="primary" type="button">Finalizar dia</button>
+            <button id="nextPlanDay" class="secondary" type="button">Continuar</button>
+          </div>
+        </section>
+
+        <section class="grid two dashboard-detail">
+          <div class="panel detail-panel">
+            <div class="panel-head"><h3>Roteiro de hoje</h3><span class="pill">sem enrolar</span></div>
+            <ol class="guide-list">
+              <li>Abra a primeira aula do dia e assista com calma.</li>
+              <li>Anote o que entendeu em poucas linhas.</li>
+              <li>Faça as questões do painel para fixar.</li>
+              <li>Finalize o dia para liberar o próximo passo.</li>
+            </ol>
+          </div>
+          <div class="panel photo-detail">
+            <img src="assets/bg_love_2.jpg" alt="">
+            <div>
+              <h3>Feito para ficar leve</h3>
+              <p>O painel continua direto, mas agora com mais carinho visual, fotos e lembretes para estudar sem se perder.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel love-note">
+          <img class="love-note-photo" src="assets/flavia_icon.jpg" alt="">
+          <span class="badge">Recado</span>
+          <div>
+            <h3>Um dia de cada vez.</h3>
+            <p>Não precisa estudar tudo hoje. Faça a aula que apareceu, responda as questões e marque como concluído. O próximo passo aparece quando este terminar.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="routine" class="view">
+        <div class="toolbar">
+          <select id="weekSelect"></select>
+          <button id="clearWeek" class="secondary">Limpar marcações da semana</button>
+        </div>
+        <div class="section-intro">
+          <h3>Plano diário aprimorado</h3>
+          <p>Rotina de 60 a 90 minutos. Cada tarefa vem com link de aula/pesquisa para estudar o assunto antes de fazer as questões.</p>
+        </div>
+        <div id="routineWeek" class="week-detail"></div>
+      </section>
+
+
+      <section id="dailylessons" class="view">
+        <div class="toolbar">
+          <select id="dailyWeekSelect"></select>
+        </div>
+        <div class="section-intro">
+          <h3>Aulas do dia — Playlists numeradas</h3>
+          <p>Esta aba usa somente as playlists enviadas para organizar aula 1, aula 2, aula 3 e assim por diante.</p>
+        </div>
+        <div class="source-strip">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=fCk9oDcsVik&list=PL4U6z74-Hp2__FVAUSx1g6A-yjoWpxWX0&pp=0gcJCdAEOCosWNin">Playlist — Matemática</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=4e0_9k5KnUU&list=PL4U6z74-Hp2-iQNZy8gpHLgqzGU0-FMuQ">Playlist — Ciências da Natureza</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=F2yvzLGeDd0&list=PL4U6z74-Hp29BVkFGLMpKK62N0HpQA9xE">Playlist — Ciências Humanas</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=msOrIbu5Y-c&list=PL4U6z74-Hp29nKTHUJ7XWdPV58l6qVPPP">Playlist — Linguagens</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=u0TtoE91DH0&list=PL4U6z74-Hp2-7e6L5Hc2_40fk7i3_RQ13&pp=0gcJCdAEOCosWNin">Playlist — Redação</a>
+        </div>
+        <div id="dailyLessonsBox"></div>
+      </section>
+
+      <section id="classroom" class="view">
+        <div class="section-intro">
+          <h3>Sala de Aula</h3>
+          <p>Estude uma aula por vez: veja o objetivo, abra a aula principal em nova aba, consulte o material oficial quando houver e marque a conclusão.</p>
+        </div>
+        <div id="classroomBox"></div>
+      </section>
+
+      <section id="math" class="view">
+        <div class="section-intro">
+          <h3>Matemática do básico ao avançado</h3>
+          <p>Trilha organizada para sair do zero e chegar nos assuntos mais fortes para a prova: operações, frações, porcentagem, regra de três, equações, geometria, gráficos, função e juros.</p>
+        </div>
+        <div id="mathLessons" class="lesson-grid"></div>
+      </section>
+
+      <section id="punctuation" class="view">
+        <div class="section-intro">
+          <h3>Pontuação da Língua Portuguesa</h3>
+          <p>Foco em vírgula, dois-pontos, travessão, aspas, ponto e vírgula e aplicação na redação. Cada aula tem regra, erro comum, treino e link.</p>
+        </div>
+        <div id="punctLessons" class="lesson-grid"></div>
+      </section>
+
+      <section id="subjects" class="view">
+        <div class="section-intro">
+          <h3>Aulas de apoio</h3>
+          <p>Esta aba fica limpa para vídeos extras de reforço. As aulas do dia a dia continuam somente no Painel.</p>
+        </div>
+        <div class="toolbar">
+          <select id="subjectFilter">
+            <option value="all">Todos os apoios</option>
+            <option value="matematica">Matemática</option>
+            <option value="prova">Prova ENCCEJA</option>
+            <option value="pontuacao">Pontuação</option>
+            <option value="redacao">Redação</option>
+            <option value="natureza">Ciências da Natureza</option>
+            <option value="humanas">Ciências Humanas</option>
+          </select>
+        </div>
+        <div id="generalLessons" class="subject-sections"></div>
+      </section>
+
+      <section id="quiz" class="view">
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Simulados variados</h3>
+            <span class="pill">evita repetir</span>
+          </div>
+          <div class="quiz-controls">
+            <label>Tipo
+              <select id="quizMode">
+                <option value="mini">Rápido — 10 questões</option>
+                <option value="weekly" selected>Semanal — 20 questões</option>
+                <option value="strong">Forte — 40 questões</option>
+              </select>
+            </label>
+            <label>Semana
+              <select id="quizWeek"></select>
+            </label>
+            <button id="newQuiz" class="primary">Gerar simulado novo</button>
+          </div>
+          <p class="note">O gerador prioriza Matemática e Pontuação, mantém Natureza e Humanas, e tenta não repetir questões usadas em simulados anteriores.</p>
+        </section>
+        <section id="quizBox" class="panel quiz-box"></section>
+      </section>
+
+      <section id="errors" class="view">
+        <div class="toolbar">
+          <select id="errorFilter">
+            <option value="all">Todas as áreas</option>
+            <option value="Matemática">Matemática</option>
+            <option value="Linguagens">Linguagens</option>
+            <option value="Natureza">Natureza</option>
+            <option value="Humanas">Humanas</option>
+          </select>
+          <button id="clearReviewed" class="secondary">Apagar erros revisados</button>
+        </div>
+        <div id="errorList" class="error-list"></div>
+      </section>
+
+      <section id="essay" class="view">
+        <div class="grid two">
+          <section class="panel">
+            <div class="panel-head"><h3>Redação guiada</h3><span class="pill">estrutura simples</span></div>
+            <ol class="guide-list">
+              <li><b>Introdução:</b> apresente o tema e sua tese.</li>
+              <li><b>Desenvolvimento 1:</b> explique uma causa do problema.</li>
+              <li><b>Desenvolvimento 2:</b> mostre uma consequência ou exemplo.</li>
+              <li><b>Conclusão:</b> proponha agente, ação, meio e finalidade.</li>
+            </ol>
+            <label>Tema
+              <select id="essayTopic"></select>
+            </label>
+            <textarea id="essayDraft" rows="14" placeholder="Escreva sua redação aqui..."></textarea>
+            <button id="saveEssay" class="primary">Salvar redação</button>
+            <span id="essayMessage" class="save-msg"></span>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><h3>Checklist antes de entregar</h3><span class="pill">rápido</span></div>
+            <div class="checklist">
+              <label><input type="checkbox"> Eu respondi exatamente ao tema.</label>
+              <label><input type="checkbox"> Minha tese aparece na introdução.</label>
+              <label><input type="checkbox"> Cada desenvolvimento tem uma ideia principal.</label>
+              <label><input type="checkbox"> Usei conectivos sem exagerar.</label>
+              <label><input type="checkbox"> Revisei vírgula entre sujeito e verbo.</label>
+              <label><input type="checkbox"> A proposta tem agente, ação, meio e finalidade.</label>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="materials" class="view">
+        <div class="panel">
+          <div class="panel-head"><h3>Links e materiais de apoio</h3><span class="pill">aulas + oficiais</span></div>
+          <div class="resource-grid">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/encceja">Página oficial do Encceja</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/inep/pt-br/assuntos/sistemas-e-plataformas/sistema-encceja-nacional">Sistema Encceja Nacional</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/encceja/materiais-de-estudo">Inep — Materiais oficiais</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/encceja/provas-e-gabaritos">Inep — Provas e gabaritos</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://download.inep.gov.br/educacao_basica/encceja/material_estudo/livro_estudante/ciencias_humanas_em_br.pdf">Livro oficial — Ciências Humanas</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://download.inep.gov.br/educacao_basica/encceja/material_estudo/livro_estudante/ciencias_naturais_em_br.pdf">Livro oficial — Ciências da Natureza</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=fCk9oDcsVik&list=PL4U6z74-Hp2__FVAUSx1g6A-yjoWpxWX0&pp=0gcJCdAEOCosWNin">Playlist — Matemática</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=msOrIbu5Y-c&list=PL4U6z74-Hp29nKTHUJ7XWdPV58l6qVPPP">Playlist — Linguagens</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=u0TtoE91DH0&list=PL4U6z74-Hp2-7e6L5Hc2_40fk7i3_RQ13&pp=0gcJCdAEOCosWNin">Playlist — Redação</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=F2yvzLGeDd0&list=PL4U6z74-Hp29BVkFGLMpKK62N0HpQA9xE">Playlist — Ciências Humanas</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=4e0_9k5KnUU&list=PL4U6z74-Hp2-iQNZy8gpHLgqzGU0-FMuQ">Playlist — Ciências da Natureza</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://gramaticaemvideo.com.br/curso/pontuacao">Gramática em Vídeo — Pontuação</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/encceja/provas-e-gabaritos">Provas antigas oficiais</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Como usar este painel</h3>
+          <div class="material-grid">
+            <article><b>1. Entre no painel</b><span>Digite a senha e vá direto para o Painel. Ele foi feito para mostrar o que estudar hoje, sem precisar procurar matéria por matéria.</span></article>
+            <article><b>2. Faça o dia de hoje</b><span>Comece pelo bloco Fazer o dia. Assista às aulas que aparecem, anote o principal e não se preocupe com os próximos dias ainda.</span></article>
+            <article><b>3. Use a Sala de Aula</b><span>Clique em Abrir aula. Na Sala de Aula, leia o objetivo, veja a prática e aperte Aula principal para abrir o vídeo certo em outra aba.</span></article>
+            <article><b>4. Feche com questões</b><span>Depois da aula, clique em Fazer questões. Se errar, o painel guarda o erro para revisar depois com calma.</span></article>
+            <article><b>5. Marque como feito</b><span>Quando terminar uma tarefa, marque a caixinha. Isso salva seu progresso no navegador automaticamente.</span></article>
+            <article><b>6. Finalize e avance</b><span>No fim do estudo, clique em Finalizar dia. O painel libera o próximo dia, mas você também pode voltar para revisar.</span></article>
+            <article><b>7. Use apoio só quando precisar</b><span>Aulas de apoio servem para reforço rápido. Use quando travar em Matemática, Pontuação ou estratégia de prova.</span></article>
+            <article><b>8. Consulte materiais</b><span>Em Materiais ficam links oficiais, provas antigas e playlists completas para revisar ou conferir alguma informação importante.</span></article>
+          </div>
+          <p class="note"><b>Para que serve:</b> este painel organiza seu estudo para o ENCCEJA em passos pequenos. A ideia é abrir, fazer apenas o dia indicado, responder questões, marcar o progresso e continuar no próximo dia sem se perder.</p>
+        </div>
+      </section>
+
+      <footer class="love-footer">Desenvolvido pelo amor da sua vida, te amo; para Flavia.</footer>
+    </main>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
